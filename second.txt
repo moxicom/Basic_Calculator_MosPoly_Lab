@@ -1,0 +1,100 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace WpfApp2
+{
+    public partial class MainWindow : Window
+    {
+        double value = 0;
+        string operation = "";
+        bool operationSelected = false;
+
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+
+        private void NumberButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (operationSelected)
+            {
+                ResultTextBox.Text = "";
+                operationSelected = false;
+                
+            }
+
+            Button button = (Button)sender;
+            ResultTextBox.Text += button.Content.ToString();
+        }
+
+        private void OperationButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            if (ResultTextBox.Text != "") { // if there is a number in the textbox
+                if (value != 0)
+                {
+                    EqualsButton_Click(sender, e);
+                }
+
+                operation = button.Content.ToString();
+                value = double.Parse(ResultTextBox.Text);
+                operationSelected = true;
+            }
+        }
+
+        private void EqualsButton_Click(object sender, RoutedEventArgs e)
+        {
+            double secondValue = double.Parse(ResultTextBox.Text);
+
+            switch (operation)
+            {
+                case "+":
+                    ResultTextBox.Text = (value + secondValue).ToString();
+                    break;
+                case "-":
+                    ResultTextBox.Text = (value - secondValue).ToString();
+                    break;
+                case "*":
+                    ResultTextBox.Text = (value * secondValue).ToString();
+                    break;
+                case "/":
+                    if (secondValue == 0)
+                    {
+                        MessageBox.Show("Cannot divide by zero");
+                    }
+                    else
+                    {
+                        ResultTextBox.Text = (value / secondValue).ToString();
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            value = double.Parse(ResultTextBox.Text);
+            operation = "";
+            operationSelected = false;
+        }
+
+        private void ClearButton_Click(object sender, RoutedEventArgs e)
+        {
+            ResultTextBox.Text = "";
+            value = 0;
+            operation = "";
+            operationSelected = false;
+        }
+
+    }
+}
